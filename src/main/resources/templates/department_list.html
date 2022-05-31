@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container">
+    <div th:include="layout"></div>
+    <!-- 部门列表 -->
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">
+            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+            部门列表
+            <a id="btnAdd" th:href="@{'/department/addPage/'}" class="btn btn-sm btn-success" style="margin-left: 85%">新建部门</a>
+        </div>
+        <!-- Table -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>部门名称</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="department:${departments}">
+                    <td th:text="${department.id}"></td>
+
+                    <td th:text="${department.department_name}"></td>
+                    <td>
+                        <a th:href="@{'/department/updatePage/'+${department.id}}" class="btn btn-primary btn-xs btn-edit">编辑</a>
+                        <a th:href="@{'/department/delete/'+${department.id}}" class="btn btn-danger btn-xs btn-delete">删除</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

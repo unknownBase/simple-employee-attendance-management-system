@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.deng.attendance.repository.DepartmentRepository">
+    <select id="findAll"  resultType="Department">
+        select id, department_name from t_department
+    </select>
+    <select id="get" resultType="Department">
+        select id, department_name from t_department where id = #{id}
+    </select>
+    <insert id="save" parameterType="Department">
+        insert into t_department(department_name) values (#{department_name})
+    </insert>
+    <update id="update" parameterType="Department">
+        update t_department
+        <set>
+            <if test="department_name != null">department_name = #{department_name},</if>
+        </set>
+        where id = #{id}
+    </update>
+    <delete id="delete" parameterType="int">
+        delete from t_department where id = #{id}
+    </delete>
+</mapper>
