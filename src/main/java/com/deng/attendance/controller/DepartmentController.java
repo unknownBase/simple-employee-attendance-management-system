@@ -44,12 +44,20 @@ public class DepartmentController {
     }
 
     //根据id查找部门信息
+//    @GetMapping("/updatePage/{id}")
+//    public String updatePage(Model model, @PathVariable int id){
+//        Department departments = departmentService.get(id);
+////        System.out.println(departments);
+//        model.addAttribute("departments",departments);
+//        return "department_edit";
+//    }
+
+    //根据id查找部门信息
     @GetMapping("/updatePage/{id}")
-    public String updatePage(Model model, @PathVariable int id){
+    @ResponseBody
+    public Department updatePage(@PathVariable int id){
         Department departments = departmentService.get(id);
-//        System.out.println(departments);
-        model.addAttribute("departments",departments);
-        return "department_edit";
+        return departmentService.update(departments);
     }
 
     // 更新部门信息
@@ -58,9 +66,6 @@ public class DepartmentController {
         String id = request.getParameter("id");
         Department departmentById = departmentService.get(Integer.parseInt(id));
         departmentService.update(department);
-//        System.out.println("更新前后数据对比");
-//        System.out.println(departmentById);
-//        System.out.println(department);
         return "redirect:/department/list";
     }
 

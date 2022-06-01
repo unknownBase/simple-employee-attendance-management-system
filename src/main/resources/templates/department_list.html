@@ -13,7 +13,8 @@
         <div class="panel-heading">
             <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
             部门列表
-            <a id="btnAdd" th:href="@{'/department/addPage/'}" class="btn btn-sm btn-success" style="margin-left: 85%">新建部门</a>
+            <a id="btnAdd" class="btn btn-sm btn-success" style="margin-left: 85%">新建部门</a>
+<!--            <a id="btnAdd" th:href="@{'/department/addPage/'}" class="btn btn-sm btn-success" style="margin-left: 85%">新建部门</a>-->
         </div>
         <!-- Table -->
         <table class="table table-bordered">
@@ -30,7 +31,8 @@
 
                     <td th:text="${department.department_name}"></td>
                     <td>
-                        <a th:href="@{'/department/updatePage/'+${department.id}}" class="btn btn-primary btn-xs btn-edit">编辑</a>
+                        <a th:id="${department.id}" class="btn btn-primary btn-xs btn-edit">编辑</a>
+<!--                        <a th:href="@{'/department/updatePage/'+${department.id}}" class="btn btn-primary btn-xs btn-edit">编辑</a>-->
                         <a th:href="@{'/department/delete/'+${department.id}}" class="btn btn-danger btn-xs btn-delete">删除</a>
                     </td>
                 </tr>
@@ -38,5 +40,96 @@
         </table>
     </div>
 </div>
+
+<div id="depart_add" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="mySmallModalLabelAdd">新建部门</h4>
+            </div>
+            <div class="modal-body">
+                <from id="formAdd">
+                    <div class="clearfix">
+                        <div class="col-xs-12">
+                            <div class="form-group" style="position: relative;margin-bottom: 20px;">
+                                <label>部门名称</label>
+                                <input id="add_department_name" type="text" name="department_name" maxlength="32" class="form-control" placeholder="部门名称" required="">
+                                <span class="error-msg" style="color: red;position: absolute;"></span>
+                            </div>
+                        </div>
+                    </div>
+                </from>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="depart_edit" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="mySmallModalLabelEdit">编辑部门信息</h4>
+            </div>
+            <div class="modal-body">
+                <from id="formEdit">
+                    <div class="clearfix">
+                        <div class="col-xs-12">
+                            <div class="form-group" style="position: relative;margin-bottom: 20px;">
+                                <label>部门ID</label>
+                                <input id="edit_department_id" type="text" name="department_name" maxlength="32"
+                                       class="form-control" placeholder="部门名称" required="" readonly>
+                                <span class="error-msg" style="color: red;position: absolute;"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="form-group" style="position: relative;margin-bottom: 20px;">
+                                <label>部门名称</label>
+                                <input id="edit_department_name" type="text" name="department_name" maxlength="32"
+                                       class="form-control" placeholder="部门名称" required="">
+                                <span class="error-msg" style="color: red;position: absolute;"></span>
+                            </div>
+                        </div>
+                    </div>
+                </from>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        bindBtnAddEvent();
+        bindBtnEditEvent();
+    })
+
+    function bindBtnAddEvent() {
+        $("#btnAdd").click(function () {
+            // 点击新建按钮，显示对话框。
+            $('#depart_add').modal('show');
+        });
+    }
+
+    function bindBtnEditEvent() {
+        $(".btn-edit").click(function () {
+            $('#depart_edit').modal('show');
+            var id = this.id;
+
+            $.ajax({
+                url: "/attendance/department/updatePage/" + id,
+                type: "get",
+                async:false,
+                data:{},
+                success: function (data) {
+                    $("#edit_department_id").val(data.id);
+                    $("#edit_department_name").val(data.department_name);
+                }
+            })
+        });
+    }
+</script>
 </body>
 </html>

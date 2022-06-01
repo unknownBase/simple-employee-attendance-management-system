@@ -15,7 +15,7 @@ public interface DepartmentService {
 
     int save(Department department);
 
-    int update(Department department);
+    Department update(Department department);
 
     int delete(int id);
 }

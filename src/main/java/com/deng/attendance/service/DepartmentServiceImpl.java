@@ -33,8 +33,9 @@ public class DepartmentServiceImpl implements DepartmentService{
     }
 
     @Override
-    public int update(Department department) {
-        return departmentRepository.update(department);
+    public Department update(Department department) {
+        departmentRepository.update(department);
+        return department;
     }
 
     @Override
