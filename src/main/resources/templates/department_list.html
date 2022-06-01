@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="layout::head">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
 <div class="container">
-    <div th:include="layout"></div>
+    <nav th:replace="layout::nav"></nav>
     <!-- 部门列表 -->
     <div class="panel panel-default">
         <!-- Default panel contents -->
@@ -62,6 +62,10 @@
                     </div>
                 </from>
             </div>
+            <div class="modal-footer">
+                <button id="btnCancel" type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+                <button id="addSave" type="button" class="btn btn-primary">保 存</button>
+            </div>
         </div>
     </div>
 </div>
@@ -96,6 +100,10 @@
                     </div>
                 </from>
             </div>
+            <div class="modal-footer">
+                <button id="editCancel" type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+                <button id="editSave" type="button" class="btn btn-primary">保 存</button>
+            </div>
         </div>
     </div>
 </div>
@@ -108,8 +116,34 @@
 
     function bindBtnAddEvent() {
         $("#btnAdd").click(function () {
+            //$("#formAdd")[0].reset();
+            $("#formAdd").find('input[type=text],select,input[type=hidden]').each(function() {
+                $(this).val('');
+            });
             // 点击新建按钮，显示对话框。
             $('#depart_add').modal('show');
+
+        });
+
+        $("#addSave").click(function () {
+            // 点击新建按钮，显示对话框。
+            var department_name = $("input[id='add_department_name']").val();
+            console.log(department_name);
+
+            $.ajax({
+                url: "/attendance/department/add/",
+                type: "post",
+                dataType: 'json',
+                data:{"department_name": department_name},
+                success: function (data) {
+                    console.log(data);
+                    // 关闭对话框
+                    $('#depart_add').modal('hide');
+                    // 刷新页面
+                    location.reload()
+                }
+            })
+
         });
     }
 
@@ -121,13 +155,34 @@
             $.ajax({
                 url: "/attendance/department/updatePage/" + id,
                 type: "get",
-                async:false,
                 data:{},
                 success: function (data) {
                     $("#edit_department_id").val(data.id);
                     $("#edit_department_name").val(data.department_name);
                 }
             })
+        });
+
+        $("#editSave").click(function () {
+            // 点击新建按钮，显示对话框。
+            var id = $("input[id='edit_department_id']").val();
+            var department_name = $("input[id='edit_department_name']").val();
+            console.log(id,department_name);
+
+            $.ajax({
+                url: "/attendance/department/update/",
+                type: "post",
+                dataType: 'json',
+                data:{"id": id,"department_name": department_name},
+                success: function (data) {
+                    console.log(data);
+                    // 关闭对话框
+                    $('#depart_edit').modal('hide');
+                    // 刷新页面
+                    location.reload()
+                }
+            })
+
         });
     }
 </script>

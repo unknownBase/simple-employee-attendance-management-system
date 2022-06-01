@@ -2,6 +2,7 @@ package com.deng.attendance.controller;
 
 import com.deng.attendance.entity.Department;
 import com.deng.attendance.service.DepartmentService;
+import com.mysql.cj.protocol.x.Notice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,12 +36,11 @@ public class DepartmentController {
     }
 
     // 新建部门
-    @RequestMapping("/add")
-    public String addDepartment(Department department){
-        departmentService.save(department);
-//        System.out.println("添加的数据");
-//        System.out.println(department);
-        return "redirect:/department/list";
+    @PostMapping ("/add")
+    @ResponseBody
+    public int addDepartment(Department department){
+        return departmentService.save(department);
+//        return "redirect:/department/list";
     }
 
     //根据id查找部门信息
@@ -62,11 +62,13 @@ public class DepartmentController {
 
     // 更新部门信息
     @PostMapping("/update")
-    public String updateDepartment(Model model, Department department, HttpServletRequest request){
-        String id = request.getParameter("id");
-        Department departmentById = departmentService.get(Integer.parseInt(id));
-        departmentService.update(department);
-        return "redirect:/department/list";
+    @ResponseBody
+//    public Department updateDepartment(Model model, Department department, HttpServletRequest request){
+    public Department updateDepartment(Department department){
+//        String id = request.getParameter("id");
+//        Department departmentById = departmentService.get(Integer.parseInt(id));
+        return departmentService.update(department);
+//        return "redirect:/department/list";
     }
 
     //删除数据
