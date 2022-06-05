@@ -11,4 +11,12 @@ import java.util.List;
 @Mapper
 public interface RoleRepository {
     List<Role> findAll();
+
+    Role get(int id);
+
+    int save(Role role);
+
+    int update(Role role);
+
+    int delete(int id);
 }

@@ -3,6 +3,22 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.deng.attendance.repository.RoleRepository">
     <select id="findAll" resultType="Role">
-        select id, role_name from t_role
+        select id, role_name from t_role order by id
     </select>
+    <select id="get" resultType="Role">
+        select id, role_name from t_role where id = #{id}
+    </select>
+    <insert id="save" parameterType="Role">
+        insert into t_role(role_name) values (#{role_name})
+    </insert>
+    <update id="update" parameterType="Role">
+        update t_role
+        <set>
+            <if test="role_name != null">role_name = #{role_name},</if>
+        </set>
+        where id = #{id}
+    </update>
+    <delete id="delete" parameterType="int">
+        delete from t_role where id = #{id}
+    </delete>
 </mapper>

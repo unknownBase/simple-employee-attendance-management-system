@@ -1,22 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="layout::head">
     <meta charset="UTF-8">
     <title>Title</title>
-    <link type="text/css" rel="/static/css/bootstrap.min.css">
-    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div class="container">
-    <div th:include="layout"></div>
+    <nav th:replace="layout::nav"></nav>
     <!-- 部门列表 -->
     <div class="panel panel-default">
         <!-- Default panel contents -->
         <div class="panel-heading">
             <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
             角色列表
-            <input id="btnAdd" type="button" value="新建角色" class="btn btn-sm btn-success" style="margin-left: 85%">
+            <a id="btnAdd" class="btn btn-sm btn-success" style="margin-left: 85%">新建角色</a>
         </div>
         <!-- Table -->
         <table class="table table-bordered">
@@ -32,13 +29,159 @@
                 <td th:text="${role.id}"></td>
                 <td th:text="${role.role_name}"></td>
                 <td>
-                    <input uid="{{ obj.id }}" type="button" class="btn btn-primary btn-xs btn-edit" value="编辑">
-                    <input uid="{{ obj.id }}" class="btn btn-danger btn-xs btn-delete" type="button" value="删除">
+                    <a th:id="${role.id}" class="btn btn-primary btn-xs btn-edit">编辑</a>
+                    <a th:href="@{'/department/delete/'+${role.id}}" class="btn btn-danger btn-xs btn-delete">删除</a>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
 </div>
+
+<div id="role_add" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="mySmallModalLabelAdd">新建角色</h4>
+            </div>
+            <div class="modal-body">
+                <from id="formAdd">
+                    <div class="clearfix">
+                        <div class="col-xs-12">
+                            <div class="form-group" style="position: relative;margin-bottom: 20px;">
+                                <label>角色名称</label>
+                                <input id="add_role_name" type="text" name="role_name" maxlength="32" class="form-control" placeholder="角色名称" required="">
+                                <span class="error-msg" style="color: red;position: absolute;"></span>
+                            </div>
+                        </div>
+                    </div>
+                </from>
+            </div>
+            <div class="modal-footer">
+                <button id="btnCancel" type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+                <button id="addSave" type="button" class="btn btn-primary">保 存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="role_edit" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="mySmallModalLabelEdit">编辑角色信息</h4>
+            </div>
+            <div class="modal-body">
+                <from id="formEdit">
+                    <div class="clearfix">
+                        <div class="col-xs-12">
+                            <div class="form-group" style="position: relative;margin-bottom: 20px;">
+                                <label>角色ID</label>
+                                <input id="edit_role_id" type="text" name="id" maxlength="32"
+                                       class="form-control" placeholder="角色ID" required="" readonly>
+                                <span class="error-msg" style="color: red;position: absolute;"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="form-group" style="position: relative;margin-bottom: 20px;">
+                                <label>角色名称</label>
+                                <input id="edit_role_name" type="text" name="role_name" maxlength="32"
+                                       class="form-control" placeholder="角色名称" required="">
+                                <span class="error-msg" style="color: red;position: absolute;"></span>
+                            </div>
+                        </div>
+                    </div>
+                </from>
+            </div>
+            <div class="modal-footer">
+                <button id="editCancel" type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+                <button id="editSave" type="button" class="btn btn-primary">保 存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        bindBtnAddEvent();
+        bindBtnEditEvent();
+    })
+
+    function bindBtnAddEvent() {
+        $("#btnAdd").click(function () {
+            //$("#formAdd")[0].reset();
+            $("#formAdd").find('input[type=text],select,input[type=hidden]').each(function() {
+                $(this).val('');
+            });
+            // 点击新建按钮，显示对话框。
+            $('#role_add').modal('show');
+
+        });
+
+        $("#addSave").click(function () {
+            // 点击新建按钮，显示对话框。
+            var role_name = $("input[id='add_role_name']").val();
+            console.log(role_name);
+
+            $.ajax({
+                url: "/attendance/role/add/",
+                type: "post",
+                dataType: 'json',
+                data:{"role_name": role_name},
+                success: function (data) {
+                    console.log(data);
+                    // 关闭对话框
+                    $('#role_add').modal('hide');
+                    // 刷新页面
+                    location.reload()
+                }
+            })
+
+        });
+    }
+
+    function bindBtnEditEvent() {
+        $(".btn-edit").click(function () {
+            $('#role_edit').modal('show');
+            var id = this.id;
+
+            $.ajax({
+                url: "/attendance/role/updatePage/" + id,
+                type: "get",
+                data:{},
+                success: function (data) {
+                    $("#edit_role_id").val(data.id);
+                    $("#edit_role_name").val(data.role_name);
+                }
+            })
+        });
+
+        $("#editSave").click(function () {
+            // 点击新建按钮，显示对话框。
+            var id = $("input[id='edit_role_id']").val();
+            var role_name = $("input[id='edit_role_name']").val();
+            console.log(id, role_name);
+
+            $.ajax({
+                url: "/attendance/role/update/",
+                type: "post",
+                dataType: 'json',
+                data:{"id": id,"role_name": role_name},
+                success: function (data) {
+                    console.log(data);
+                    // 关闭对话框
+                    $('#role_edit').modal('hide');
+                    // 刷新页面
+                    location.reload()
+                }
+            })
+
+        });
+    }
+</script>
 </body>
 </html>

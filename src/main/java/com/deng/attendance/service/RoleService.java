@@ -8,5 +8,13 @@ import java.util.List;
  * @Author by djw on 2022/5/24
  */
 public interface RoleService {
-    public List<Role> findAll();
+    List<Role> findAll();
+
+    Role get(int id);
+
+    int save(Role role);
+
+    Role update(Role role);
+
+    int delete(int id);
 }

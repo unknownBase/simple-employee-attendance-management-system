@@ -9,7 +9,7 @@ import java.util.List;
  * @Author by djw on 2022/5/10
  */
 public interface DepartmentService {
-    public List<Department> findAll();
+    List<Department> findAll();
 
     Department get(int id);
 

@@ -30,10 +30,10 @@ public class DepartmentController {
         return "department_list";
     }
 
-    @RequestMapping("/addPage")
-    public String addPage(){
-        return "department_add";
-    }
+//    @RequestMapping("/addPage")
+//    public String addPage(){
+//        return "department_add";
+//    }
 
     // 新建部门
     @PostMapping ("/add")

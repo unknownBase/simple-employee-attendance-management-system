@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.deng.attendance.repository.DepartmentRepository">
     <select id="findAll"  resultType="Department">
-        select id, department_name from t_department
+        select id, department_name from t_department order by id
     </select>
     <select id="get" resultType="Department">
         select id, department_name from t_department where id = #{id}
