@@ -2,19 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.deng.attendance.repository.DepartmentRepository">
-    <select id="findAll"  resultType="Department">
+    <select id="findAll"  resultType="com.deng.attendance.entity.Department">
         select id, department_name from t_department order by id
     </select>
-    <select id="get" resultType="Department">
+    <select id="get" resultType="com.deng.attendance.entity.Department">
         select id, department_name from t_department where id = #{id}
     </select>
-    <insert id="save" parameterType="Department">
-        insert into t_department(department_name) values (#{department_name})
+    <insert id="save" parameterType="com.deng.attendance.entity.Department">
+        insert into t_department(department_name) values (#{departmentName})
     </insert>
-    <update id="update" parameterType="Department">
+    <update id="update" parameterType="com.deng.attendance.entity.Department">
         update t_department
         <set>
-            <if test="department_name != null">department_name = #{department_name},</if>
+            <if test="departmentName != null">department_name = #{departmentName},</if>
         </set>
         where id = #{id}
     </update>

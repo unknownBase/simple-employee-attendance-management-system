@@ -56,8 +56,9 @@ public class DepartmentController {
     @GetMapping("/updatePage/{id}")
     @ResponseBody
     public Department updatePage(@PathVariable int id){
-        Department departments = departmentService.get(id);
-        return departmentService.update(departments);
+//        Department departments = departmentService.get(id);
+//        return departmentService.update(departments);
+        return departmentService.get(id);
     }
 
     // 更新部门信息
@@ -73,11 +74,13 @@ public class DepartmentController {
 
     //删除数据
     @RequestMapping("/delete/{id}")
-    public String delete(@PathVariable Integer id, HttpServletResponse servletResponse) throws IOException {
-        int count =departmentService.delete(id);
-        if(count==1){
-            servletResponse.sendRedirect("/list");
-        }
-        return "404";
+    @ResponseBody
+    public Integer delete(@PathVariable Integer id) {
+//        int count =departmentService.delete(id);
+//        if(count==1){
+//            servletResponse.sendRedirect("/list");
+//        }
+//        return "404";
+        return departmentService.delete(id);
     }
 }

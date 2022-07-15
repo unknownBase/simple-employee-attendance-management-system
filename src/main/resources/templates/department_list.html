@@ -29,11 +29,11 @@
                 <tr th:each="department:${departments}">
                     <td th:text="${department.id}"></td>
 
-                    <td th:text="${department.department_name}"></td>
+                    <td th:text="${department.departmentName}"></td>
                     <td>
                         <a th:id="${department.id}" class="btn btn-primary btn-xs btn-edit">编辑</a>
 <!--                        <a th:href="@{'/department/updatePage/'+${department.id}}" class="btn btn-primary btn-xs btn-edit">编辑</a>-->
-                        <a th:href="@{'/department/delete/'+${department.id}}" class="btn btn-danger btn-xs btn-delete">删除</a>
+                        <a th:id="${department.id}" class="btn btn-danger btn-xs btn-delete">删除</a>
                     </td>
                 </tr>
             </tbody>
@@ -55,7 +55,7 @@
                         <div class="col-xs-12">
                             <div class="form-group" style="position: relative;margin-bottom: 20px;">
                                 <label>部门名称</label>
-                                <input id="add_department_name" type="text" name="department_name" maxlength="32" class="form-control" placeholder="部门名称" required="">
+                                <input id="add_department_name" type="text" name="departmentName" maxlength="32" class="form-control" placeholder="部门名称" required="">
                                 <span class="error-msg" style="color: red;position: absolute;"></span>
                             </div>
                         </div>
@@ -92,7 +92,7 @@
                         <div class="col-xs-12">
                             <div class="form-group" style="position: relative;margin-bottom: 20px;">
                                 <label>部门名称</label>
-                                <input id="edit_department_name" type="text" name="department_name" maxlength="32"
+                                <input id="edit_department_name" type="text" name="departmentName" maxlength="32"
                                        class="form-control" placeholder="部门名称" required="">
                                 <span class="error-msg" style="color: red;position: absolute;"></span>
                             </div>
@@ -107,11 +107,30 @@
         </div>
     </div>
 </div>
+<!-- 删除（对话框） -->
+<div id="depart_delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+
+        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+            <h4>是否确定删除？</h4>
+            <p style="margin: 10px 0;"> 删除后，所有关联的相关数据都会被删除。</p>
+            <p style="text-align: right;">
+                <button id="btnConfirmDelete" type="button" class="btn btn-danger">确 定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+            </p>
+        </div>
+
+    </div>
+</div>
 
 <script type="text/javascript">
+    var DELETE_ID;
+
     $(function () {
         bindBtnAddEvent();
         bindBtnEditEvent();
+        bindBtnDeleteEvent();
+        bindBtnConfirmDeleteEvent();
     })
 
     function bindBtnAddEvent() {
@@ -127,15 +146,15 @@
 
         $("#addSave").click(function () {
             // 点击新建按钮，显示对话框。
-            var department_name = $("input[id='add_department_name']").val();
+            var departmentName = $("input[id='add_department_name']").val();
 
             $.ajax({
                 url: "/attendance/department/add/",
                 type: "post",
                 dataType: 'json',
-                data:{"department_name": department_name},
+                data:{"departmentName": departmentName},
                 success: function (data) {
-                    console.log(data);
+                    // console.log(data);
                     // 关闭对话框
                     $('#depart_add').modal('hide');
                     // 刷新页面
@@ -157,7 +176,7 @@
                 data:{},
                 success: function (data) {
                     $("#edit_department_id").val(data.id);
-                    $("#edit_department_name").val(data.department_name);
+                    $("#edit_department_name").val(data.departmentName);
                 }
             })
         });
@@ -165,16 +184,16 @@
         $("#editSave").click(function () {
             // 点击新建按钮，显示对话框。
             var id = $("input[id='edit_department_id']").val();
-            var department_name = $("input[id='edit_department_name']").val();
-            console.log(id,department_name);
+            var departmentName = $("input[id='edit_department_name']").val();
+            // console.log(id,departmentName);
 
             $.ajax({
                 url: "/attendance/department/update/",
                 type: "post",
                 dataType: 'json',
-                data:{"id": id,"department_name": department_name},
+                data:{"id": id,"departmentName": departmentName},
                 success: function (data) {
-                    console.log(data);
+                    // console.log(data);
                     // 关闭对话框
                     $('#depart_edit').modal('hide');
                     // 刷新页面
@@ -182,6 +201,34 @@
                 }
             })
 
+        });
+    }
+
+    function bindBtnDeleteEvent() {
+        $(".btn-delete").click(function () {
+            // alert("点击了删除");
+            // 显示删除对话框
+            $("#depart_delete").modal('show');
+            DELETE_ID = this.id;
+        });
+    }
+
+    function bindBtnConfirmDeleteEvent() {
+        $("#btnConfirmDelete").click(function () {
+            $.ajax({
+                url: "/attendance/department/delete/" + DELETE_ID,  //    => /order/delete/?uid=123
+                type: "GET",
+                data: {
+                    id: DELETE_ID
+                },
+                dataType: "JSON",
+                success: function (data) {
+                    // 关闭对话框
+                    $('#depart_delete').modal('hide');
+                    // 刷新页面
+                    location.reload()
+                }
+            })
         });
     }
 </script>

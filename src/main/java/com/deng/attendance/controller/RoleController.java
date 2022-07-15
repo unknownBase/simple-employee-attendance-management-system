@@ -36,8 +36,7 @@ public class RoleController {
     @GetMapping("/updatePage/{id}")
     @ResponseBody
     public Role updatePage(@PathVariable int id){
-        Role roles = roleService.get(id);
-        return roleService.update(roles);
+        return roleService.get(id);
     }
 
     @PostMapping("/update")
@@ -47,12 +46,9 @@ public class RoleController {
     }
 
     @RequestMapping("/delete/{id}")
-    public String delete(@PathVariable Integer id, HttpServletResponse servletResponse) throws IOException{
-        int count = roleService.delete(id);
-        if(count == 1){
-            servletResponse.sendRedirect("/list");
-        }
-        return "404";
+    @ResponseBody
+    public Integer delete(@PathVariable Integer id) {
+        return roleService.delete(id);
     }
 
 }

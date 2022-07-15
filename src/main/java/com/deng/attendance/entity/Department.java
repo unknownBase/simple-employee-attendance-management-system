@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class Department {
     private Integer id;
-    private String department_name;
+    private String departmentName;
 
     public Integer getId() {
         return id;
@@ -18,19 +18,19 @@ public class Department {
         this.id = id;
     }
 
-    public String getDepartment_name() {
-        return department_name;
+    public String getDepartmentName() {
+        return departmentName;
     }
 
-    public void setDepartment_name(String department_name) {
-        this.department_name = department_name;
+    public void setDepartmentName(String department_name) {
+        this.departmentName = department_name;
     }
 
     @Override
     public String toString() {
         return "Department{" +
                 "id=" + id +
-                ", department_name='" + department_name + '\'' +
+                ", department_name='" + departmentName + '\'' +
                 '}';
     }
 }
